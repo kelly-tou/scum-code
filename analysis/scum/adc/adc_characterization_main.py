@@ -24,27 +24,25 @@ def plot_adc_characterization(data: str, adc_config: AdcConfig) -> None:
     """
     # Open the ADC characterization data file.
     df = pd.read_csv(data, comment="#")
-    df_by_input = df.groupby(df.columns[0])
+    voltage_column, adc_output_column = df.columns
+    df_by_input = df.groupby(voltage_column)
     logging.info(df_by_input.describe())
 
     # Calculate the means and standard deviations of the ADC output for each input.
-    means = df_by_input.mean()
-    errors = df_by_input.std()
+    means = df_by_input.mean()[adc_output_column]
+    errors = df_by_input.std()[adc_output_column]
 
     # Plot the means compared to an ideal ADC.
     input_range = np.linspace(min(df_by_input.groups.keys()),
                               max(df_by_input.groups.keys()), 100)
     fig, ax = plt.subplots(figsize=(12, 8))
     jump_indices = np.concatenate(
-        ([0], np.where(np.diff(np.squeeze(means.values)) < 0)[0] + 1,
-         [len(means)]))
+        ([0], np.where(np.diff(means.values) < 0)[0] + 1, [len(means)]))
     for jump_index in range(1, len(jump_indices)):
         error_bar = plt.errorbar(
             means.index[jump_indices[jump_index - 1]:jump_indices[jump_index]],
-            np.squeeze(means.values)[jump_indices[jump_index -
-                                                  1]:jump_indices[jump_index]],
-            yerr=np.squeeze(
-                errors.values)[jump_indices[jump_index -
+            means.values[jump_indices[jump_index - 1]:jump_indices[jump_index]],
+            yerr=errors.values[jump_indices[jump_index -
                                             1]:jump_indices[jump_index]],
             color="C0",
             label="ADC output [LSB]",
@@ -67,12 +65,12 @@ def plot_adc_characterization(data: str, adc_config: AdcConfig) -> None:
     means.plot.bar(yerr=errors, ax=ax).legend(loc="upper left")
     ax.bar_label(
         ax.containers[1],
-        labels=np.round(np.squeeze(means.values), decimals=2),
+        labels=np.round(means.values, decimals=2),
         label_type="center",
     )
     ax.bar_label(
         ax.containers[1],
-        labels=np.round(np.squeeze(errors.values), decimals=2),
+        labels=np.round(errors.values, decimals=2),
         label_type="edge",
     )
     ax.set_title("Mean and standard deviation of the ADC output")
@@ -90,13 +88,14 @@ def plot_adc_characterization_sensor(data: str, adc_config: AdcConfig) -> None:
     """
     # Open the ADC characterization data file.
     df = pd.read_csv(data, comment="#")
-    df_by_input = df[df[df.columns[0]] <= SENSOR_INPUT_MAX].groupby(
-        df.columns[0])
+    voltage_column, adc_output_column = df.columns
+    df_by_input = df[df[voltage_column] <= SENSOR_INPUT_MAX].groupby(
+        voltage_column)
     logging.info(df_by_input.describe())
 
     # Calculate the means and standard deviations of the ADC output for each input.
-    means = df_by_input.mean()
-    errors = df_by_input.std()
+    means = df_by_input.mean()[adc_output_column]
+    errors = df_by_input.std()[adc_output_column]
 
     # Perform a linear regression on the ADC output as a function of the input.
     linear_regression = LinearRegression(list(df_by_input.groups.keys()), means)
@@ -104,8 +103,8 @@ def plot_adc_characterization_sensor(data: str, adc_config: AdcConfig) -> None:
                  1 / adc_config.ldo_output * (2**NUM_ADC_BITS - 1))
     logging.info(
         "SCuM ADC: m = %f, b = %f, residuals = %f",
-        linear_regression.m,
-        linear_regression.b,
+        linear_regression.slope,
+        linear_regression.y_intercept,
         linear_regression.residuals,
     )
 
@@ -115,8 +114,8 @@ def plot_adc_characterization_sensor(data: str, adc_config: AdcConfig) -> None:
     fig, ax = plt.subplots(figsize=(12, 8))
     plt.errorbar(
         means.index,
-        np.squeeze(means.values),
-        yerr=np.squeeze(errors.values),
+        means.values,
+        yerr=errors.values,
         label="ADC output [LSB]",
     )
     plt.plot(
@@ -142,12 +141,12 @@ def plot_adc_characterization_sensor(data: str, adc_config: AdcConfig) -> None:
     means.plot.bar(yerr=errors, ax=ax).legend(loc="upper left")
     ax.bar_label(
         ax.containers[1],
-        labels=np.round(np.squeeze(means.values), decimals=2),
+        labels=np.round(means.values, decimals=2),
         label_type="center",
     )
     ax.bar_label(
         ax.containers[1],
-        labels=np.round(np.squeeze(errors.values), decimals=2),
+        labels=np.round(errors.values, decimals=2),
         label_type="edge",
     )
     ax.set_title("Mean and standard deviation of the ADC output")

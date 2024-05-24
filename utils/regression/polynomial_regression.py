@@ -54,5 +54,5 @@ class PolynomialRegression(Regression):
         powers = np.arange(self.degree + 1)
         A = (self.x**powers[:, np.newaxis]).T
         result, residuals = np.linalg.lstsq(A, self.y, rcond=None)[:2]
-        self.coeffs = np.squeeze(result)
+        self.coeffs = result
         self.residuals = residuals[0] if len(residuals) > 0 else 0

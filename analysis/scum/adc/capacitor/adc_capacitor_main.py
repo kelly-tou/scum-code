@@ -32,9 +32,9 @@ def plot_capacitor_voltage(data: str, data_without_scum: str) -> None:
         df_without_scum[time_column_without_scum],
         df_without_scum[capacitor_column_without_scum],
     )
-    logging.info("Capacitor voltage: m = %f", capacitor_voltage_line.m)
+    logging.info("Capacitor voltage: m = %f", capacitor_voltage_line.slope)
     logging.info("Capacitor voltage without SCuM: m = %f",
-                 capacitor_voltage_line_without_scum.m)
+                 capacitor_voltage_line_without_scum.slope)
 
     # Plot the capacitor voltage over time.
     fig, ax = plt.subplots(figsize=(12, 8))
@@ -43,7 +43,8 @@ def plot_capacitor_voltage(data: str, data_without_scum: str) -> None:
              label="Capacitor voltage with SCuM ADC")
     plt.plot(
         df[time_column],
-        capacitor_voltage_line.m * df[time_column] + capacitor_voltage_line.b,
+        capacitor_voltage_line.slope * df[time_column] +
+        capacitor_voltage_line.y_intercept,
         "--",
     )
     plt.plot(
@@ -53,9 +54,9 @@ def plot_capacitor_voltage(data: str, data_without_scum: str) -> None:
     )
     plt.plot(
         df_without_scum[time_column_without_scum],
-        capacitor_voltage_line_without_scum.m *
+        capacitor_voltage_line_without_scum.slope *
         df_without_scum[time_column_without_scum] +
-        capacitor_voltage_line_without_scum.b,
+        capacitor_voltage_line_without_scum.y_intercept,
         "--",
     )
     ax.set_xlabel("Time [s]")

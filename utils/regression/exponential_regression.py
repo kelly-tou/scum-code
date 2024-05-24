@@ -47,7 +47,7 @@ class ExponentialRegression(Regression):
         This function sets a, tau, and b, where y = a * exp(-x/tau) + b.
         """
         A = np.vstack([self.x, np.ones(len(self.x))]).T
-        result = np.squeeze(np.linalg.lstsq(A, np.log(self.y), rcond=None)[0])
+        result = np.linalg.lstsq(A, np.log(self.y), rcond=None)[0]
         tau_guess, a_guess, b_guess = -1 / result[0], np.exp(result[1]), 0
 
         # Use an optimizer to find the optimal parameters of the exponential.

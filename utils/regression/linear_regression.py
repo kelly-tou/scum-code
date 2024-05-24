@@ -79,5 +79,5 @@ class WeightedLinearRegression(LinearRegression):
         y_weighted = self.y * W
         result, residuals = np.linalg.lstsq(A_weighted, y_weighted,
                                             rcond=None)[:2]
-        self.coeffs = np.squeeze(result)
+        self.coeffs = result
         self.residuals = residuals[0] if len(residuals) > 0 else 0

@@ -39,7 +39,7 @@ class LogarithmicRegression(Regression):
         A = np.vstack(
             [np.log(self.x) / np.log(self.base),
              np.ones(len(self.x))]).T
-        result = np.squeeze(np.linalg.lstsq(A, self.y, rcond=None)[0])
+        result = np.linalg.lstsq(A, self.y, rcond=None)[0]
         a_guess, b_guess = result
 
         # Use an optimizer to find the optimal parameters of the logarithm.

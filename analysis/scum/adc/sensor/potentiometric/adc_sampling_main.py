@@ -56,15 +56,15 @@ def plot_adc_sampling_means_stddevs(data: str, adc_config: AdcConfig) -> None:
     logging.info(df_by_input.describe())
 
     # Calculate the means and standard deviations of the ADC output for each ADC sampling rate.
-    means = df_by_input.mean()
-    errors = df_by_input.std()
+    means = df_by_input.mean()[adc_output_column]
+    errors = df_by_input.std()[adc_output_column]
 
     # Plot the ADC output means and standard deviations at different ADC sampling rates.
     fig, ax = plt.subplots(figsize=(12, 8))
     plt.errorbar(
         means.index,
-        np.squeeze(means.values),
-        yerr=np.squeeze(errors.values),
+        means.values,
+        yerr=errors.values,
         label="ADC output [LSB]",
     )
     ax.set_xscale("log")

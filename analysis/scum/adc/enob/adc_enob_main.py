@@ -21,8 +21,9 @@ def plot_adc_samples(data: str, adc_config: AdcConfig) -> None:
     """
     # Open the ADC data file.
     df = pd.read_csv(data, comment="#")
+    adc_output_column, = df.columns
     logging.info(df.describe())
-    adc_data = AdcData(np.squeeze(df.values), adc_config.max_sampling_rate)
+    adc_data = AdcData(df[adc_output_column], adc_config.max_sampling_rate)
     adc_data.disambiguate_msb_9()
 
     # Plot the ADC samples.

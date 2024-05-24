@@ -62,19 +62,19 @@ def plot_adc_means_stddevs(data: str, adc_config: AdcConfig) -> None:
     logging.info(df_by_input.describe())
 
     # Calculate the means and standard deviations of the ADC output for each concentration.
-    means = df_by_input.mean()
-    errors = df_by_input.std()
+    means = df_by_input.mean()[adc_output_column]
+    errors = df_by_input.std()[adc_output_column]
 
     # Perform a linear regression on the ADC output as a function of log10(concentration).
     linear_regression_data = means[means.index > 0.00001]
     linear_regression = LinearRegression(
         np.log10(linear_regression_data.index),
-        adc_config.lsb2volt(linear_regression_data[adc_output_column].values),
+        adc_config.lsb2volt(linear_regression_data.values),
     )
     logging.info(
         "Linear regression in volts: m = %f, b = %f, residuals = %f",
-        linear_regression.m,
-        linear_regression.b,
+        linear_regression.slope,
+        linear_regression.y_intercept,
         linear_regression.residuals,
     )
 
@@ -82,13 +82,14 @@ def plot_adc_means_stddevs(data: str, adc_config: AdcConfig) -> None:
     fig, ax = plt.subplots(figsize=(12, 8))
     plt.errorbar(
         means.index,
-        np.squeeze(means.values),
-        yerr=np.squeeze(errors.values),
+        means.values,
+        yerr=errors.values,
         label="ADC output [LSB]",
     )
     plt.plot(
         means.index,
-        adc_config.volt2lsb(linear_regression.evaluate(np.log10(means.index))),
+        adc_config.volt2lsb(
+            linear_regression.evaluate(np.log10(means.index.values))),
         "--",
         label="Linear regression",
     )

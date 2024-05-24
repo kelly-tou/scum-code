@@ -20,8 +20,9 @@ def plot_adc_samples_with_scope_and_averaging(data: str, scope_data: str,
     """
     # Open the ADC data file.
     df = pd.read_csv(data, comment="#")
+    adc_output_column, = df.columns
     logging.info(df.describe())
-    adc_data = AdcData(np.squeeze(df.values), adc_config.max_sampling_rate)
+    adc_data = AdcData(df[adc_output_column], adc_config.max_sampling_rate)
     adc_data.disambiguate_msb_9()
 
     # Open the ADC scope data file.

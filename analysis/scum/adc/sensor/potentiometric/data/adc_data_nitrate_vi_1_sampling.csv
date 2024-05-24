@@ -11,7 +11,7 @@
 # 10000 loop cycles of sleep correspond roughly to an ADC sampling period of 15 ms, or 66.67 Hz.
 # 1000/100 loop cycles of sleep lead to an ADC sampling rate that is too fast for the serial monitor, so we sample at the target rate, but only print the ADC output once every 10/100 ADC samples (roughly an output period of 15 ms, or 66.67 Hz).
 
-Sampling period [loop cycles], ADC output [LSB]
+Sampling period [loop cycles],ADC output [LSB]
 
 # 1000000 loop cycles
 1000000,160
