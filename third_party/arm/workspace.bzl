@@ -1,3 +1,5 @@
+"""This module contains the ARM toolchain."""
+
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 def arm_workspace():
