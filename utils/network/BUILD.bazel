@@ -9,6 +9,7 @@ py_library(
         requirement("matplotlib"),
         requirement("numpy"),
         requirement("scikit-rf"),
+        requirement("SciencePlots"),
     ],
 )
 

@@ -10,6 +10,7 @@ def main(argv):
 
     s1p_viewer = S1PViewer(FLAGS.file)
     s1p_viewer.plot_s11_magnitude()
+    s1p_viewer.plot_z()
 
 
 if __name__ == "__main__":
