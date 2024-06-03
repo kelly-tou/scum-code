@@ -64,13 +64,12 @@ class LivePlotter(ABC):
         """Updates the data to plot."""
         while True:
             x, y = self.next_data()
-            self.data_lock.acquire()
-            self.data = np.hstack((self.data, np.array([[x], [y]])))
-            self.data = self.data[:,
-                                  np.max(self.data[0]) -
-                                  self.data[0] <= self.xmax]
-            self.data[0] -= np.min(self.data[0])
-            self.data_lock.release()
+            with self.data_lock:
+                self.data = np.hstack((self.data, np.array([[x], [y]])))
+                self.data = self.data[:,
+                                      np.max(self.data[0]) -
+                                      self.data[0] <= self.xmax]
+                self.data[0] -= np.min(self.data[0])
 
     def _update_animation(self, frame: int) -> tuple[artist.Artist]:
         """Updates the animation for the next frame.
@@ -81,9 +80,8 @@ class LivePlotter(ABC):
         Returns:
             Iterable of artists.
         """
-        self.data_lock.acquire()
-        self.line.set_data(self.data)
-        self.data_lock.release()
+        with self.data_lock:
+            self.line.set_data(self.data)
         return self.line,
 
     def _run_animation(self) -> None:
