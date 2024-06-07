@@ -86,6 +86,7 @@ def plot_num_iterations(num_iterations_per_grid: str) -> None:
     )
     ax.set_xlabel("Number of rows")
     ax.set_ylabel("Number of columns")
+    ax.set_zlabel("Mean number of iterations")
     ax.view_init(30, -45)
     plt.colorbar(surf)
     plt.show()

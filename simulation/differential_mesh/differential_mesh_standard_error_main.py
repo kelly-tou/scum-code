@@ -45,6 +45,7 @@ def plot_standard_error(num_rows: int, num_cols: int) -> None:
     )
     ax.set_xlabel("Row")
     ax.set_ylabel("Column")
+    ax.set_zlabel("Standard error")
     ax.view_init(30, -45)
     plt.colorbar(surf)
     plt.show()
