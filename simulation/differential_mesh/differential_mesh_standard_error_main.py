@@ -32,7 +32,7 @@ def plot_standard_error(num_rows: int, num_cols: int) -> None:
         node_stderrs[col, row] = stderr
 
     # Plot the standard error across the grid.
-    plt.style.use(["science"])
+    plt.style.use("science")
     fig, ax = plt.subplots(
         figsize=(12, 8),
         subplot_kw={"projection": "3d"},

@@ -22,7 +22,7 @@ def plot_standard_error_sweep(standard_errors: str) -> None:
     logging.info(df.describe())
 
     # Plot the standard error as a function of the grid dimensions.
-    plt.style.use(["science"])
+    plt.style.use("science")
     fig, ax = plt.subplots(
         figsize=(12, 8),
         subplot_kw={"projection": "3d"},
@@ -41,7 +41,7 @@ def plot_standard_error_sweep(standard_errors: str) -> None:
     plt.show()
 
     # Plot the squared standard error as a function of the grid dimensions.
-    plt.style.use(["science"])
+    plt.style.use("science")
     fig, ax = plt.subplots(
         figsize=(12, 8),
         subplot_kw={"projection": "3d"},

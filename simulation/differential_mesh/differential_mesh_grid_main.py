@@ -17,7 +17,7 @@ def main(argv):
     grid.add_edge_measurement_noise(FLAGS.noise)
 
     # Draw the grid.
-    plt.style.use(["science"])
+    plt.style.use("science")
     grid.draw()
 
     # Create the graph from the edge list.
@@ -25,7 +25,7 @@ def main(argv):
     grid.add_edge_measurement_noise(FLAGS.noise)
 
     # Draw the grid.
-    plt.style.use(["science"])
+    plt.style.use("science")
     grid.draw()
 
 

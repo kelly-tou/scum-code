@@ -54,7 +54,7 @@ def solve_differential_mesh_grid(solver_cls: DifferentialMeshSolver,
     logging.info("MSE = %f", solver.calculate_mean_squared_error())
 
     # Draw the grid.
-    plt.style.use(["science"])
+    plt.style.use("science")
     grid.draw()
 
 

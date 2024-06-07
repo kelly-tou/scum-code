@@ -72,7 +72,7 @@ def plot_num_iterations(num_iterations_per_grid: str) -> None:
                 logging.info("(%d, %d) %f", num_rows, num_cols, mean_iterations)
 
     # Plot the number of iterations as a function of the grid dimensions.
-    plt.style.use(["science"])
+    plt.style.use("science")
     fig, ax = plt.subplots(
         figsize=(12, 8),
         subplot_kw={"projection": "3d"},
