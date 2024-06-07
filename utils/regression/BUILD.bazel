@@ -13,6 +13,16 @@ py_library(
     ],
 )
 
+py_test(
+    name = "exponential_regression_test",
+    srcs = ["exponential_regression_test.py"],
+    deps = [
+        ":exponential_regression",
+        requirement("absl-py"),
+        requirement("numpy"),
+    ],
+)
+
 py_library(
     name = "linear_regression",
     srcs = ["linear_regression.py"],
@@ -40,6 +50,16 @@ py_library(
         requirement("absl-py"),
         requirement("numpy"),
         requirement("scipy"),
+    ],
+)
+
+py_test(
+    name = "logarithmic_regression_test",
+    srcs = ["logarithmic_regression_test.py"],
+    deps = [
+        ":logarithmic_regression",
+        requirement("absl-py"),
+        requirement("numpy"),
     ],
 )
 
