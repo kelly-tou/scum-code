@@ -62,7 +62,7 @@ def plot_num_iterations(num_iterations_per_grid: str) -> None:
     mean_num_iterations = df.groupby([num_rows_column, num_cols_column
                                      ])[num_iterations_column].mean()
 
-    logging.info("Mean number of iterations:")
+    logging.info("Mean iterations:")
     num_iterations = np.zeros((max_num_cols, max_num_rows))
     for num_rows in range(1, max_num_rows + 1):
         for num_cols in range(1, max_num_cols + 1):
@@ -86,7 +86,7 @@ def plot_num_iterations(num_iterations_per_grid: str) -> None:
     )
     ax.set_xlabel("Number of rows")
     ax.set_ylabel("Number of columns")
-    ax.set_zlabel("Mean number of iterations")
+    ax.set_zlabel("Mean iterations")
     ax.view_init(30, -45)
     plt.colorbar(surf)
     plt.show()
