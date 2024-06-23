@@ -49,10 +49,9 @@ def compare_crc_filter_combs(length: int, R: int) -> None:
 
     for coefficients in FILTERS:
         # Apply a comb filter to the signal.
-        comb_filter = _create_comb_filter_before_decimation(coefficients, R)
-        cic_filter_decimator = CicFilterDecimator(R=1,
+        cic_filter_decimator = CicFilterDecimator(R=R,
                                                   N=1,
-                                                  comb_filter=comb_filter)
+                                                  comb_filter=coefficients)
         response = cic_filter_decimator.filter(delta, downsampling=False)
 
         # Plot the spectrum.

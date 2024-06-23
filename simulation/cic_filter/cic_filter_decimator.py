@@ -14,9 +14,11 @@ class CicFilterDecimator:
 
         if comb_filter is None:
             comb_filter = np.ones(1)
-        self.comb_filter = comb_filter
+        self.comb_filter = comb_filter.astype(np.float64)
         self.num_comb_filter_taps = len(comb_filter)
-        self.comb_filter_diff = self._create_comb_filter_diff(comb_filter)
+        # Scale the filter to its length.
+        self.comb_filter /= np.mean(self.comb_filter)
+        self.comb_filter_diff = self._create_comb_filter_diff(self.comb_filter)
 
     def filter(self,
                signal: np.ndarray,
