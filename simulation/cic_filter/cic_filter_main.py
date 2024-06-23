@@ -66,6 +66,14 @@ def plot_cic_filter_comb_filter(signal: np.ndarray, R: int, N: int) -> None:
         cic_filter_decimator_standard.calculate_spectrum_magnitude(
             response_standard, fft_length))
 
+    # Plot the signal.
+    plt.style.use(["science", "grid"])
+    fig, ax = plt.subplots(figsize=(12, 8))
+    ax.stem(response)
+    ax.set_xlabel("Sample")
+    ax.set_ylabel("Output")
+    plt.show()
+
     # Plot the spectrum.
     plt.style.use(["science", "grid"])
     fig, ax = plt.subplots(figsize=(12, 8))

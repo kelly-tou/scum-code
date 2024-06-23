@@ -27,24 +27,38 @@ class CicFilterDecimator:
             signal: Signal.
             downsampling: If true, downsample the signal after filtering.
         """
-        # Integrate the signal N times.
-        integrated = signal
-        for _ in range(self.N):
-            integrated = np.cumsum(integrated)
+        downsampling_ratio = self.R // self.num_comb_filter_taps
 
-        if downsampling:
-            downsampled = integrated[::self.R // self.num_comb_filter_taps]
+        # If the number of samples is too large, integrating multiple times
+        # will cause overflow, so directly convolve with the comb filter
+        # instead of integrating and applying the comb filter difference.
+        if self.N <= 4 and downsampling:
+            # Integrate the signal N times.
+            integrated = signal
+            for _ in range(self.N):
+                integrated = np.cumsum(integrated)
+
+            # Downsample the integrated signal to reduce the number of comb
+            # filter taps.
+            downsampled = integrated[::downsampling_ratio]
+
+            # Apply the comb filter to the signal N times.
             combed = downsampled
-        else:
-            combed = integrated
+            for _ in range(self.N):
+                combed = self._convolve(combed, self.comb_filter_diff)
+            return combed[::self.num_comb_filter_taps]
 
-        # Apply a comb filter to the signal N times.
+        # Extend the comb filter to filter before downsampling.
+        comb_filter = np.repeat(self.comb_filter, downsampling_ratio)
+
+        # Apply the comb filter to the signal N times.
+        filtered = signal
         for _ in range(self.N):
-            combed = self._convolve(combed, self.comb_filter_diff)
+            filtered = self._convolve(filtered, comb_filter)
 
         if downsampling:
-            return combed[::self.num_comb_filter_taps]
-        return combed
+            return filtered[::self.R]
+        return filtered
 
     @staticmethod
     def calculate_spectrum_magnitude(
