@@ -10,7 +10,20 @@ py_binary(
         "//analysis/scum/adc:adc_config",
         requirement("absl-py"),
         requirement("matplotlib"),
-        requirement("numpy"),
+        requirement("SciencePlots"),
         requirement("pandas"),
+    ],
+)
+
+py_binary(
+    name = "adc_mux_all_types_main",
+    srcs = ["adc_mux_all_types_main.py"],
+    data = ["//analysis/scum/adc/mux/data:adc_mux_data_all_types"],
+    deps = [
+        "//analysis/scum/adc:adc_config",
+        requirement("absl-py"),
+        requirement("matplotlib"),
+        requirement("pandas"),
+        requirement("SciencePlots"),
     ],
 )
