@@ -2,12 +2,12 @@
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
-RULES_PKG_VERSION = "0.10.1"
+RULES_PKG_VERSION = "1.0.0"
 
 def rules_pkg_workspace():
     http_archive(
         name = "rules_pkg",
-        sha256 = "d330dbe3e3004241ddb9b377416ffc5c823e3e2c08c0d56a7e1935499e7f8577",
+        sha256 = "cc1d6f58eb9bc2bfad247b20f07725dda2d6b119b62b11f1dab9a094a24222e6",
         strip_prefix = "rules_pkg-{}".format(RULES_PKG_VERSION),
         url = "https://github.com/bazelbuild/rules_pkg/archive/refs/tags/{}.tar.gz".format(RULES_PKG_VERSION),
     )

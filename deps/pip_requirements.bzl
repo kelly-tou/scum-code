@@ -1,4 +1,6 @@
-load("@python3_11//:defs.bzl", "interpreter")
+"""This module parses the pip dependencies."""
+
+load("@python3_12//:defs.bzl", "interpreter")
 load("@rules_python//python:pip.bzl", "pip_parse")
 
 def parse_pip_requirements():

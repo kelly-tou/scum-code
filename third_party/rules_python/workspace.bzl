@@ -2,12 +2,12 @@
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
-RULES_PYTHON_VERSION = "0.32.2"
+RULES_PYTHON_VERSION = "0.33.2"
 
 def rules_python_workspace():
     http_archive(
         name = "rules_python",
-        sha256 = "4912ced70dc1a2a8e4b86cec233b192ca053e82bc72d877b98e126156e8f228d",
+        sha256 = "e3f1cc7a04d9b09635afb3130731ed82b5f58eadc8233d4efb59944d92ffc06f",
         strip_prefix = "rules_python-{}".format(RULES_PYTHON_VERSION),
         url = "https://github.com/bazelbuild/rules_python/archive/refs/tags/{}.tar.gz".format(RULES_PYTHON_VERSION),
     )
