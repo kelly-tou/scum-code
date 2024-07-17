@@ -1,0 +1,6 @@
+package(default_visibility = ["//visibility:public"])
+
+filegroup(
+    name = "antenna_rssi_data",
+    srcs = glob(["antenna_rssi_data_*.csv"]),
+)

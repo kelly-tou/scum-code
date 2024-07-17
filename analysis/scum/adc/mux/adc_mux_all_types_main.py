@@ -34,7 +34,7 @@ def plot_muxed_adc_data(data: str, adc_config: AdcConfig) -> None:
 
     # Plot the muxed ADC readouts and time constants.
     plt.style.use(["science", "grid"])
-    fig, ax1 = plt.subplots(figsize=(12, 6))
+    fig, ax1 = plt.subplots(figsize=(12, 8))
     ax2 = ax1.twinx()
     df[adc_output_columns].plot(ax=ax1, color="C0", style=["-.", ":"])
     df[time_constant_columns].plot(ax=ax2, color="C3", style=["--", "-"])

@@ -1,0 +1,15 @@
+load("@pip_deps//:requirements.bzl", "requirement")
+
+package(default_visibility = ["//visibility:public"])
+
+py_binary(
+    name = "antenna_rssi_main",
+    srcs = ["antenna_rssi_main.py"],
+    data = ["//analysis/scum/antenna/data:antenna_rssi_data"],
+    deps = [
+        requirement("absl-py"),
+        requirement("matplotlib"),
+        requirement("pandas"),
+        requirement("SciencePlots"),
+    ],
+)
