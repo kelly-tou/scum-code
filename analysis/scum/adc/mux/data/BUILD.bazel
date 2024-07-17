@@ -7,5 +7,5 @@ filegroup(
 
 filegroup(
     name = "adc_mux_data_all_types",
-    srcs = ["adc_mux_data_all_types.csv"],
+    srcs = glob(["adc_mux_data_all_types_*.csv"]),
 )
