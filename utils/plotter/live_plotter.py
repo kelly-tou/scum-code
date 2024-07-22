@@ -23,7 +23,11 @@ class LivePlotter(ABC):
                  xmax: float,
                  ymin: float,
                  ymax: float,
-                 num_traces: int = 1) -> None:
+                 num_traces: int = 1,
+                 secindices: tuple[int] = None,
+                 secylabel: str = None,
+                 secymin: float = None,
+                 secymax: float = None) -> None:
         self.num_traces = num_traces
         self.xmax = xmax
 
@@ -35,6 +39,10 @@ class LivePlotter(ABC):
         self.ax.set_ylabel(ylabel)
         self.ax.set_xlim((0, xmax))
         self.ax.set_ylim((ymin, ymax))
+        if secindices is not None:
+            self.secax = self.ax.twinx()
+            self.secax.set_ylabel(secylabel)
+            self.secax.set_ylim((secymin, secymax))
 
         # Initialize the data and the traces. If the live plot is continuous,
         # the x-axis is the time in seconds. Otherwise, the x-axis is the
@@ -42,8 +50,19 @@ class LivePlotter(ABC):
         self.x = np.zeros(1)
         self.y = np.zeros((1, num_traces))
         self.data_lock = Lock()
-        self.traces = self.ax.plot(self.x, self.y)
-        self.ax.legend([f"Trace {i + 1}" for i in range(num_traces)])
+        self.traces = []
+        for i in range(num_traces):
+            args = {
+                "color": f"C{i}",
+                "marker": "^",
+                "label": f"Trace {i + 1}",
+            }
+            if secindices is None or i not in secindices:
+                trace, = self.ax.plot(self.x, self.y[:, i], **args)
+            else:
+                trace, = self.secax.plot(self.x, self.y[:, i], **args)
+            self.traces.append(trace)
+        self.ax.legend(handles=self.traces)
 
         # Create a thread for updating the data.
         self.data_thread = Thread(target=self._update_data)
@@ -121,9 +140,22 @@ class DiscreteLivePlotter(LivePlotter):
                  ylabel: str,
                  ymin: float,
                  ymax: float,
-                 num_traces: int = 1) -> None:
-        super().__init__(title, xlabel, ylabel, max_num_points, ymin, ymax,
-                         num_traces)
+                 num_traces: int = 1,
+                 secindices: tuple[int] = None,
+                 secylabel: str = None,
+                 secymin: float = None,
+                 secymax: float = None) -> None:
+        super().__init__(title,
+                         xlabel,
+                         ylabel,
+                         max_num_points,
+                         ymin,
+                         ymax,
+                         num_traces=num_traces,
+                         secindices=secindices,
+                         secylabel=secylabel,
+                         secymin=secymin,
+                         secymax=secymax)
 
     def next_data(self) -> tuple[float, float | tuple[float]]:
         """Returns the next data to plot.
@@ -148,9 +180,22 @@ class ContinuousLivePlotter(LivePlotter):
                  ylabel: str,
                  ymin: float,
                  ymax: float,
-                 num_traces: int = 1) -> None:
-        super().__init__(title, xlabel, ylabel, max_duration, ymin, ymax,
-                         num_traces)
+                 num_traces: int = 1,
+                 secindices: tuple[int] = None,
+                 secylabel: str = None,
+                 secymin: float = None,
+                 secymax: float = None) -> None:
+        super().__init__(title,
+                         xlabel,
+                         ylabel,
+                         max_duration,
+                         ymin,
+                         ymax,
+                         num_traces=num_traces,
+                         secindices=secindices,
+                         secylabel=secylabel,
+                         secymin=secymin,
+                         secymax=secymax)
         self.last_data_time = 0
 
     def next_data(self) -> tuple[float, float | tuple[float]]:

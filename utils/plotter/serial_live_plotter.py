@@ -21,9 +21,22 @@ class SerialLivePlotter(ContinuousLivePlotter):
                  ylabel: str,
                  ymin: float,
                  ymax: float,
-                 num_traces: int = 1) -> None:
-        super().__init__(max_duration, title, xlabel, ylabel, ymin, ymax,
-                         num_traces)
+                 num_traces: int = 1,
+                 secindices: tuple[int] = None,
+                 secylabel: str = None,
+                 secymin: float = None,
+                 secymax: float = None) -> None:
+        super().__init__(max_duration,
+                         title,
+                         xlabel,
+                         ylabel,
+                         ymin,
+                         ymax,
+                         num_traces=num_traces,
+                         secindices=secindices,
+                         secylabel=secylabel,
+                         secymin=secymin,
+                         secymax=secymax)
         self.parse_data = parse_data
 
         # Open the serial port.
