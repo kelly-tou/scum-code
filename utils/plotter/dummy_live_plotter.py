@@ -8,7 +8,7 @@ from utils.plotter.live_plotter import DiscreteLivePlotter
 class DummyLivePlotter(DiscreteLivePlotter):
     """Dummy live plotter to plot dummy data."""
 
-    def __init__(self, max_num_points: int, max_counter: int):
+    def __init__(self, max_num_points: int, max_counter: int) -> None:
         super().__init__(
             max_num_points,
             title="Dummy Data",

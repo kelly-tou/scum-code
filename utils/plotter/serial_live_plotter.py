@@ -11,17 +11,29 @@ from utils.serial.serial_interface import SerialInterface
 class SerialLivePlotter(ContinuousLivePlotter):
     """Serial live plotter to plot data from a serial port."""
 
-    def __init__(self, port: str, baudrate: int, max_duration: float,
-                 parse_data: Callable[[str], float], title: str, xlabel: str,
-                 ylabel: str, ymin: float, ymax: float):
-        super().__init__(max_duration, title, xlabel, ylabel, ymin, ymax)
+    def __init__(self,
+                 port: str,
+                 baudrate: int,
+                 max_duration: float,
+                 parse_data: Callable[[str], float | tuple[float]],
+                 title: str,
+                 xlabel: str,
+                 ylabel: str,
+                 ymin: float,
+                 ymax: float,
+                 num_traces: int = 1) -> None:
+        super().__init__(max_duration, title, xlabel, ylabel, ymin, ymax,
+                         num_traces)
         self.parse_data = parse_data
 
         # Open the serial port.
         self.serial = SerialInterface(port, baudrate)
 
-    def next(self) -> float:
-        """Returns the next data to be plotted."""
+    def next(self) -> float | tuple[float]:
+        """Returns the next y-value to plot.
+
+        This function blocks until the next value is available.
+        """
         read_data = bytes()
         while len(read_data) == 0:
             read_data = self.serial.read()

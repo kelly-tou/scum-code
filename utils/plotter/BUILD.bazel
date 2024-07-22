@@ -9,6 +9,7 @@ py_library(
     deps = [
         requirement("matplotlib"),
         requirement("numpy"),
+        requirement("SciencePlots"),
     ],
 )
 
@@ -49,6 +50,23 @@ py_binary(
 pkg_tar(
     name = "adc_data_live_plotter_main_tar_pkg",
     srcs = [":adc_data_live_plotter_main"],
+    extension = ".tar.gz",
+    include_runfiles = True,
+    strip_prefix = "/utils/plotter/",
+)
+
+py_binary(
+    name = "adc_muxed_data_live_plotter_main",
+    srcs = ["adc_muxed_data_live_plotter_main.py"],
+    deps = [
+        ":serial_live_plotter",
+        requirement("absl-py"),
+    ],
+)
+
+pkg_tar(
+    name = "adc_muxed_data_live_plotter_main_tar_pkg",
+    srcs = [":adc_muxed_data_live_plotter_main"],
     extension = ".tar.gz",
     include_runfiles = True,
     strip_prefix = "/utils/plotter/",
