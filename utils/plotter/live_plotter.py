@@ -54,13 +54,15 @@ class LivePlotter(ABC):
         for i in range(num_traces):
             args = {
                 "color": f"C{i}",
-                "marker": "^",
                 "label": f"Trace {i + 1}",
             }
             if secindices is None or i not in secindices:
-                trace, = self.ax.plot(self.x, self.y[:, i], **args)
+                trace, = self.ax.plot(self.x, self.y[:, i], marker="^", **args)
             else:
-                trace, = self.secax.plot(self.x, self.y[:, i], **args)
+                trace, = self.secax.plot(self.x,
+                                         self.y[:, i],
+                                         marker="s",
+                                         **args)
             self.traces.append(trace)
         self.ax.legend(handles=self.traces)
 
