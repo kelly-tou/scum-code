@@ -24,12 +24,12 @@ def plot_standard_error(num_rows: int, num_cols: int) -> None:
         logging.info("%d %f", node, stderr)
 
     node_to_index_map = grid.get_node_to_index_map()
-    node_stderrs = np.zeros((num_cols, num_rows))
+    node_stderrs = np.zeros((num_rows, num_cols))
     for node, stderr in stderrs:
         node_index = node_to_index_map[node]
         row = node_index // num_cols
         col = node_index % num_cols
-        node_stderrs[col, row] = stderr
+        node_stderrs[row, col] = stderr
 
     # Plot the standard error across the grid.
     plt.style.use("science")
@@ -38,7 +38,9 @@ def plot_standard_error(num_rows: int, num_cols: int) -> None:
         subplot_kw={"projection": "3d"},
     )
     surf = ax.plot_surface(
-        *np.meshgrid(np.arange(1, num_rows + 1), np.arange(1, num_cols + 1)),
+        *np.meshgrid(np.arange(1, num_rows + 1),
+                     np.arange(1, num_cols + 1),
+                     indexing="ij"),
         node_stderrs,
         cmap=COLOR_MAPS["parula"],
         antialiased=False,

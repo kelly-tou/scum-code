@@ -63,12 +63,12 @@ def plot_num_iterations(num_iterations_per_grid: str) -> None:
                                      ])[num_iterations_column].mean()
 
     logging.info("Mean iterations:")
-    num_iterations = np.zeros((max_num_cols, max_num_rows))
+    num_iterations = np.zeros((max_num_rows, max_num_cols))
     for num_rows in range(1, max_num_rows + 1):
         for num_cols in range(1, max_num_cols + 1):
             if (num_rows, num_cols) in mean_num_iterations.index:
                 mean_iterations = mean_num_iterations.loc[(num_rows, num_cols)]
-                num_iterations[num_cols - 1, num_rows - 1] = mean_iterations
+                num_iterations[num_rows - 1, num_cols - 1] = mean_iterations
                 logging.info("(%d, %d) %f", num_rows, num_cols, mean_iterations)
 
     # Plot the number of iterations as a function of the grid dimensions.
@@ -79,7 +79,8 @@ def plot_num_iterations(num_iterations_per_grid: str) -> None:
     )
     surf = ax.plot_surface(
         *np.meshgrid(np.arange(1, max_num_rows + 1),
-                     np.arange(1, max_num_cols + 1)),
+                     np.arange(1, max_num_cols + 1),
+                     indexing="ij"),
         num_iterations,
         cmap=COLOR_MAPS["parula"],
         antialiased=False,

@@ -65,10 +65,10 @@ def simulate_standard_error(solver: DifferentialMeshSolver, num_rows: int,
     node_to_index_map = grid.get_node_to_index_map()
     simulated_stderrs_grid = _2d_list_to_grid(simulated_stderrs,
                                               node_to_index_map, num_rows,
-                                              num_cols).T
+                                              num_cols)
     calculated_stderrs_grid = _2d_list_to_grid(calculated_stderrs,
                                                node_to_index_map, num_rows,
-                                               num_cols).T
+                                               num_cols)
 
     # Plot the simulated and calculated standard error across the grid.
     plt.style.use("science")
@@ -77,13 +77,17 @@ def simulate_standard_error(solver: DifferentialMeshSolver, num_rows: int,
         subplot_kw={"projection": "3d"},
     )
     surf = ax.plot_surface(
-        *np.meshgrid(np.arange(1, num_rows + 1), np.arange(1, num_cols + 1)),
+        *np.meshgrid(np.arange(1, num_rows + 1),
+                     np.arange(1, num_cols + 1),
+                     indexing="ij"),
         simulated_stderrs_grid,
         cmap=COLOR_MAPS["parula"],
         antialiased=False,
     )
     ax.plot_surface(
-        *np.meshgrid(np.arange(1, num_rows + 1), np.arange(1, num_cols + 1)),
+        *np.meshgrid(np.arange(1, num_rows + 1),
+                     np.arange(1, num_cols + 1),
+                     indexing="ij"),
         calculated_stderrs_grid,
         cmap=COLOR_MAPS["parula"],
         alpha=0.2,
@@ -124,7 +128,7 @@ def simulate_standard_error_sweep(solver: DifferentialMeshSolver,
                     solver, noise, num_iterations, verbose)
                 # Record the standard error at the farthest corner of the grid.
                 _, corner_stderr = max(stderrs, key=lambda x: x[0])
-                corner_stderrs[num_cols - 1, num_rows - 1] = corner_stderr
+                corner_stderrs[num_rows - 1, num_cols - 1] = corner_stderr
                 logging.info("(%d, %d) %f", num_rows, num_cols, corner_stderr)
 
     # Plot the standard error as a function of the grid dimensions.
@@ -135,7 +139,8 @@ def simulate_standard_error_sweep(solver: DifferentialMeshSolver,
     )
     surf = ax.plot_surface(
         *np.meshgrid(np.arange(1, max_num_rows + 1),
-                     np.arange(1, max_num_cols + 1)),
+                     np.arange(1, max_num_cols + 1),
+                     indexing="ij"),
         corner_stderrs,
         cmap=COLOR_MAPS["parula"],
         antialiased=False,
