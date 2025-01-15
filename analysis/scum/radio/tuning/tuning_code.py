@@ -16,15 +16,20 @@ NUM_TUNING_CODE_BITS = 15
 class TuningCode:
     """Represents a tuning code consisting of a coarse, mid, and fine code."""
 
-    def __init__(self,
-                 coarse: int = None,
-                 mid: int = None,
-                 fine: int = None,
-                 *,
-                 tuning_code: int = None):
+    def __init__(
+        self,
+        coarse: int = None,
+        mid: int = None,
+        fine: int = None,
+        *,
+        tuning_code: int = None,
+    ):
         if tuning_code is not None:
-            self.coarse, self.mid, self.fine = self.tuning_code_to_coarse_mid_fine(
-                tuning_code)
+            (
+                self.coarse,
+                self.mid,
+                self.fine,
+            ) = self.tuning_code_to_coarse_mid_fine(tuning_code)
         else:
             self.coarse = coarse
             self.mid = mid
@@ -33,8 +38,11 @@ class TuningCode:
     @property
     def tuning_code(self) -> int:
         """Tuning code."""
-        return self.coarse_mid_fine_to_tuning_code(self.coarse, self.mid,
-                                                   self.fine)
+        return self.coarse_mid_fine_to_tuning_code(
+            self.coarse,
+            self.mid,
+            self.fine,
+        )
 
     @staticmethod
     def coarse_mid_fine_to_tuning_code(
@@ -50,8 +58,8 @@ class TuningCode:
         Returns:
             The tuning code(s).
         """
-        return coarse * 2**(2 * NUM_COARSE_MID_FINE_BITS
-                           ) + mid * 2**NUM_COARSE_MID_FINE_BITS + fine
+        return (coarse * 2**(2 * NUM_COARSE_MID_FINE_BITS) +
+                mid * 2**NUM_COARSE_MID_FINE_BITS + fine)
 
     @staticmethod
     def tuning_code_to_coarse_mid_fine(
@@ -65,5 +73,8 @@ class TuningCode:
         Returns:
             The coarse, mid, and fine code(s).
         """
-        return (tuning_code >> 10) & 0x1F, (
-            tuning_code >> 5) & 0x1F, tuning_code & 0x1F
+        return (
+            (tuning_code >> 10) & 0x1F,
+            (tuning_code >> 5) & 0x1F,
+            tuning_code & 0x1F,
+        )
